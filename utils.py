@@ -89,9 +89,10 @@ def create_rag_chain(db_name):
 
     # すでに対象のデータベースが作成済みの場合は読み込み、未作成の場合は新規作成する
     if os.path.isdir(db_name):
-        db = FAISS(persist_directory=".db", embedding_function=embeddings)
+        db = FAISS.load_local(db_name, embeddings, allow_dangerous_deserialization=True)
     else:
-        db = FAISS.from_documents(splitted_docs, embedding=embeddings, persist_directory=".db")
+        db = FAISS.from_documents(splitted_docs, embedding=embeddings)
+        db.save_local(db_name)
 
     retriever = db.as_retriever(search_kwargs={"k": ct.TOP_K})
 
