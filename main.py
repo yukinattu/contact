@@ -13,6 +13,7 @@ from initialize import initialize
 import components as cn
 import constants as ct
 import openai
+import os
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
