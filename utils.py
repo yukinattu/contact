@@ -21,7 +21,7 @@ from langchain.chains import create_history_aware_retriever, create_retrieval_ch
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.callbacks.streamlit import StreamlitCallbackHandler
 import constants as ct
-
+from langchain_community.vectorstores import FAISS
 
 ############################################################
 # 設定関連
@@ -89,9 +89,9 @@ def create_rag_chain(db_name):
 
     # すでに対象のデータベースが作成済みの場合は読み込み、未作成の場合は新規作成する
     if os.path.isdir(db_name):
-        db = Chroma(persist_directory=".db", embedding_function=embeddings)
+        db = FAISS(persist_directory=".db", embedding_function=embeddings)
     else:
-        db = Chroma.from_documents(splitted_docs, embedding=embeddings, persist_directory=".db")
+        db = FAISS.from_documents(splitted_docs, embedding=embeddings, persist_directory=".db")
 
     retriever = db.as_retriever(search_kwargs={"k": ct.TOP_K})
 
